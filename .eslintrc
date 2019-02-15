@@ -1,6 +1,6 @@
 {
   "parser": "babel-eslint",
-  "extends": ["standard"],
+  "plugins": ["prettier"],
   "globals": {
     "asyncTest": true,
     "expect": true,
@@ -10,6 +10,6 @@
     "test": true
   },
   "rules": {
-    "no-var": 2
+    "prettier/prettier": "error"
   }
 }

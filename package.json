@@ -2,7 +2,7 @@
   "name": "rx-roans",
   "title": "Koans for RxJS",
   "description": "The Koans walk you along the path to enlightenment in order to learn RxJS.",
-  "version":"0.0.1",
+  "version": "0.0.1",
   "maintainers": [
     {
       "name": "Matthew Podwysocki",
@@ -22,6 +22,19 @@
       "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
     }
   ],
+  "scripts": {
+    "test": "mocha --require babel-register --ui mocha-qunit-ui -b",
+    "prettier": "prettier --write '**/*.{ts,js,md,json}'"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "arrowParens": "avoid"
+  },
   "dependencies": {
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.5.0",
@@ -30,14 +43,13 @@
     "mocha-qunit-ui": "*",
     "rxjs": "^5.0.0-beta.12"
   },
-  "scripts": {
-    "test": "mocha --require babel-register --ui mocha-qunit-ui -b"
-  },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
     "eslint": "^3.5.0",
     "eslint-config-standard": "^6.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.0"
+    "eslint-plugin-standard": "^2.0.0",
+    "prettier": "1.16.4"
   }
 }

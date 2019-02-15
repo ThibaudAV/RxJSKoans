@@ -1,8 +1,8 @@
 var Range = {
-  create: function (start, end) {
+  create: function(start, end) {
     var results = [],
-        current = start,
-        step = start < end ? 1 : -1;
+      current = start,
+      step = start < end ? 1 : -1;
 
     results.push(current);
 
@@ -12,7 +12,7 @@ var Range = {
     }
 
     return results;
-  }
+  },
 };
 
 module.exports = Range;
