@@ -1,31 +1,31 @@
 import { Observable } from 'rxjs/Rx';
 
-QUnit.module('Imperative');
+describe('Imperative', () => {
+  const __ = 'Fill in the blank';
 
-const __ = 'Fill in the blank';
+  test('can make a decision with an if with no else', () => {
+    const results = [];
+    Observable.range(1, 10)
+      .flatMap(x => Observable.if(() => x % 2 === 0, Observable.of(x)))
+      .subscribe(::results.push);
 
-test('can make a decision with an if with no else', () => {
-  const results = [];
-  Observable.range(1, 10)
-    .flatMap(x => Observable.if(() => x % 2 === 0, Observable.of(x)))
-    .subscribe(::results.push);
+    expect(__).toEqual(results.join(''));
+  });
 
-  equal(__, results.join(''));
-});
+  test('can make a decision with an if with an else', () => {
+    const results = [];
+    Observable.range(1, 5)
+      .flatMap((x, i) =>
+        Observable.if(
+          () => x % 2 === 0,
+          Observable.of(x),
+          Observable.range(x, i),
+        ),
+      )
+      .subscribe(::results.push);
 
-test('can make a decision with an if with an else', () => {
-  const results = [];
-  Observable.range(1, 5)
-    .flatMap((x, i) =>
-      Observable.if(
-        () => x % 2 === 0,
-        Observable.of(x),
-        Observable.range(x, i),
-      ),
-    )
-    .subscribe(::results.push);
-
-  equal(__, results.join(''));
+    expect(__).toEqual(results.join(''));
+  });
 });
 
 // XXX `case` not yet implemented
