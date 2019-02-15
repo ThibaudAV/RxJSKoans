@@ -33,11 +33,11 @@ describe('Observable Streams', () => {
     });
 
     let eventStreamResult = 1;
-    const events = new Subject();
+    const events = new Subject<number>();
     events.subscribe(x => {
       eventStreamResult = x;
     });
-    events.__(73);
+    // events.__(73);
 
     expect(observableResult).toEqual(eventStreamResult);
   });
@@ -45,7 +45,7 @@ describe('Observable Streams', () => {
   // What does Observable.of() map to for a Subject?
   test('event streams have multiple results', () => {
     let eventStreamResult = 0;
-    const events = new Subject();
+    const events = new Subject<number>();
     events.subscribe(x => {
       eventStreamResult += x;
     });
@@ -88,7 +88,7 @@ describe('Observable Streams', () => {
 
   test('this is still an event stream', () => {
     let received = 0;
-    const numbers = new Subject();
+    const numbers = new Subject<number>();
     numbers.subscribe(x => {
       received += x;
     });
@@ -127,20 +127,20 @@ describe('Observable Streams', () => {
 
   test('nothing listens until you subscribe', () => {
     let sum = 0;
-    const numbers = Observable.from(Range.create(1, 10));
+    const numbers = Observable.from(Range.create(1, 10) as number[]);
     const observable = numbers.do(n => {
       sum += n;
     });
 
     expect(0).toEqual(sum);
-    observable.__();
+    // observable.__();
 
     expect(1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10).toEqual(sum);
   });
 
   test('events before you subscribe do not count', () => {
     let sum = 0;
-    const numbers = new Subject();
+    const numbers = new Subject<number>();
     const observable = numbers.do(n => {
       sum += n;
     });
@@ -158,7 +158,7 @@ describe('Observable Streams', () => {
 
   test('events after you unsubscribe do not count', () => {
     let sum = 0;
-    const numbers = new Subject();
+    const numbers = new Subject<number>();
     const observable = numbers.do(n => {
       sum += n;
     });
@@ -178,7 +178,7 @@ describe('Observable Streams', () => {
   test('events while subscribing', () => {
     const received = [];
     const words = new Subject();
-    const observable = words.do(::received.push);
+    const observable = words.do(w => received.push(w));
 
     words.next('Peter');
     words.next('said');
