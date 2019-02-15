@@ -120,8 +120,7 @@ describe('Observable Streams', () => {
       })
       .subscribe();
 
-    expect(
-      ').toEqual(=Party,3=Party,2=Party,1=Study Like Mad',
+    expect('=Party,3=Party,2=Party,1=Study Like Mad').toEqual(
       status.toString(),
     );
   });
@@ -136,7 +135,7 @@ describe('Observable Streams', () => {
     expect(0).toEqual(sum);
     observable.__();
 
-    expect(1).toEqual(2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10, sum);
+    expect(1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10).toEqual(sum);
   });
 
   test('events before you subscribe do not count', () => {
