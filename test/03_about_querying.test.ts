@@ -12,7 +12,7 @@ describe('Querying', () => {
       .filter(x => x % __ === 0)
       .map(x => x.toString())
       .toArray()
-      .subscribe(::strings.push);
+      .subscribe(x => strings.push(x));
 
     expect('11,22,33,44,55,66,77,88,99').toEqual(strings.toString());
   });
@@ -39,7 +39,7 @@ describe('Querying', () => {
     const results = [];
     Observable.range(1, 10)
       .bufferCount(__, __)
-      .subscribe(::results.push);
+      .subscribe(x => results.push(x));
 
     expect('12345').toEqual(results[0].join(''));
     expect('678910').toEqual(results[1].join(''));

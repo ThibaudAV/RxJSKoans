@@ -7,8 +7,8 @@ describe('Events', () => {
   test('the main event', () => {
     const received = [];
     const e = new EventEmitter();
-    const subscription = Observable.fromEvent(e, 'change').subscribe(
-      ::received.push,
+    const subscription = Observable.fromEvent(e, 'change').subscribe(c =>
+      received.push(c),
     );
 
     e.emit('change', 'R');

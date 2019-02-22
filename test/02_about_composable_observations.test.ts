@@ -9,7 +9,7 @@ describe('Composable Observations', () => {
     const numbers = [10, 100, __];
 
     Observable.from(numbers)
-      .reduce((sum, v) => sum + v, 0) // XXX .sum() not yet implemented
+      .sum()
       .subscribe(x => {
         received = x;
       });
@@ -42,9 +42,9 @@ describe('Composable Observations', () => {
 
     Observable.from(names)
       .filter(n => n.length <= __)
-      .subscribe(::received.push);
+      .subscribe(n => received.push(n));
 
-    expect(').toEqual(art,Wes,Erik,Matt', received);
+    expect('Bart,Wes,Erik,Matt').toEqual(received);
   });
 
   test('converting events', () => {
@@ -57,7 +57,7 @@ describe('Composable Observations', () => {
         received += x + ' ';
       });
 
-    expect(').toEqual(e hope you are enjoying this ', received);
+    expect('we hope you are enjoying this').toEqual(received);
   });
 
   test('create a more relevant stream', () => {
@@ -69,7 +69,7 @@ describe('Composable Observations', () => {
       received += x + ', ';
     });
 
-    expect(').toEqual(0, 150, 100, ', received);
+    expect('50, 150, 100, ').toEqual(received);
   });
 
   test('checking everything', () => {

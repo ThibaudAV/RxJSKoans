@@ -57,7 +57,9 @@ describe('Time', () => {
     const timeoutEvent = Observable.of('Tepid');
     const temperatures = new Subject();
 
-    temperatures.timeoutWith(timeout, timeoutEvent).subscribe(::received.push);
+    temperatures
+      .timeoutWith(timeout, timeoutEvent)
+      .subscribe(t => received.push(T));
 
     temperatures.next('Started');
 
@@ -74,7 +76,7 @@ describe('Time', () => {
   test('debouncing', done => {
     const received = [];
     const events = new Subject();
-    events.debounceTime(100).subscribe(::received.push);
+    events.debounceTime(100).subscribe(n => received.push(n));
 
     events.next('f');
     events.next('fr');
@@ -100,7 +102,7 @@ describe('Time', () => {
     events
       .bufferTime(100)
       .map(c => c.join(''))
-      .subscribe(::received.push);
+      .subscribe(c => received.push(c));
 
     events.next('R');
     events.next('x');

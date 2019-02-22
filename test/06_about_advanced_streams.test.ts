@@ -18,8 +18,8 @@ describe('Advanced Streams', () => {
     const s1 = new Subject();
     const s2 = new Subject();
 
-    s1.subscribe(::first.push);
-    s1.merge(s2).subscribe(::both.push);
+    s1.subscribe(f => first.push(f));
+    s1.merge(s2).subscribe(b => both.push(b));
 
     s1.next('I');
     s1.next('am');

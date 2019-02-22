@@ -7,7 +7,7 @@ describe('Imperative', () => {
     const results = [];
     Observable.range(1, 10)
       .flatMap(x => Observable.if(() => x % 2 === 0, Observable.of(x)))
-      .subscribe(::results.push);
+      .subscribe(x => results.push(x));
 
     expect(__).toEqual(results.join(''));
   });
@@ -22,7 +22,7 @@ describe('Imperative', () => {
           Observable.range(x, i),
         ),
       )
-      .subscribe(::results.push);
+      .subscribe(x => results.push(x));
 
     expect(__).toEqual(results.join(''));
   });

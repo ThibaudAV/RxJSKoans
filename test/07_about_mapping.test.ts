@@ -7,7 +7,7 @@ describe('Mapping', () => {
     const results = [];
     Observable.range(1, 3)
       .flatMap((x, i) => Observable.range(__, __))
-      .subscribe(::results.push);
+      .subscribe(x => results.push(x));
 
     expect('234').toEqual(results.join(''));
   });
@@ -16,7 +16,7 @@ describe('Mapping', () => {
     const results = [];
     Observable.range(1, 3)
       .switchMap(x => Observable.range(x, __))
-      .subscribe(::results.push);
+      .subscribe(x => results.push(x));
 
     expect('12345').toEqual(results.join(''));
   });
