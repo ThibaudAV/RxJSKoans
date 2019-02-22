@@ -33,7 +33,7 @@ describe('Composable Observations', () => {
       .subscribe();
 
     expect(__).toEqual(a);
-    expect(').toEqual(46', b);
+    expect('46').toEqual(b);
   });
 
   test('we wrote this', () => {
