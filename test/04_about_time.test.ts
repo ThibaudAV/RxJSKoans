@@ -1,14 +1,22 @@
-import { Observable, Scheduler, Subject } from 'rxjs/Rx';
+import { timer, Subject, of, Observable, race } from 'rxjs';
+import {
+  delay,
+  timeoutWith,
+  debounceTime,
+  bufferTime,
+  map,
+  filter,
+  timeInterval,
+  mapTo,
+} from 'rxjs/operators';
 
 describe('Time', () => {
-  const __ = 'Fill in the blank';
+  const __: any = 'Fill in the blank';
 
   test('launching an event via a scheduler', done => {
     let received = '';
     const delay = 200; // Fix this value
-    Scheduler.async.schedule(() => {
-      received = 'Finished';
-    }, delay);
+    timer(delay);
 
     setTimeout(() => {
       done();
@@ -21,7 +29,7 @@ describe('Time', () => {
     const time = __;
     const people = new Subject();
 
-    people.delay(time).subscribe(x => {
+    people.pipe(delay(time)).subscribe(x => {
       received = x;
     });
     people.next('Godot');
@@ -34,13 +42,15 @@ describe('Time', () => {
 
   test('a watched pot', done => {
     let received = '';
-    const delay = 200;
+    const delayMs = 200;
     const timeout = __;
-    const timeoutEvent = Observable.of('Tepid');
+    const timeoutEvent = of('Tepid');
 
-    Observable.of('Boiling')
-      .delay(delay)
-      .timeoutWith(timeout, timeoutEvent)
+    of('Boiling')
+      .pipe(
+        delay(delayMs),
+        timeoutWith(timeout, timeoutEvent),
+      )
       .subscribe(x => {
         received = x;
       });
@@ -54,12 +64,12 @@ describe('Time', () => {
   test('you can place a time limit on how long an event should take', done => {
     const received = [];
     const timeout = 200;
-    const timeoutEvent = Observable.of('Tepid');
+    const timeoutEvent = of('Tepid');
     const temperatures = new Subject();
 
     temperatures
-      .timeoutWith(timeout, timeoutEvent)
-      .subscribe(t => received.push(T));
+      .pipe(timeoutWith(timeout, timeoutEvent))
+      .subscribe(t => received.push(t));
 
     temperatures.next('Started');
 
@@ -76,7 +86,7 @@ describe('Time', () => {
   test('debouncing', done => {
     const received = [];
     const events = new Subject();
-    events.debounceTime(100).subscribe(n => received.push(n));
+    events.pipe(debounceTime(100)).subscribe(n => received.push(n));
 
     events.next('f');
     events.next('fr');
@@ -100,8 +110,10 @@ describe('Time', () => {
     const received = [];
     const events = new Subject();
     events
-      .bufferTime(100)
-      .map(c => c.join(''))
+      .pipe(
+        bufferTime(100),
+        map(c => c.join('')),
+      )
       .subscribe(c => received.push(c));
 
     events.next('R');
@@ -128,8 +140,10 @@ describe('Time', () => {
     const events = new Subject();
 
     events
-      .timeInterval()
-      .filter(t => t.interval > 100)
+      .pipe(
+        timeInterval(),
+        filter(t => t.interval > 100),
+      )
       .subscribe(t => {
         received.push(t.value);
       });
@@ -151,10 +165,10 @@ describe('Time', () => {
 
   test('results can be ambiguous timing', done => {
     let results = 0;
-    const first = Observable.timer(10).mapTo(-1);
-    const secnd = Observable.timer(20).mapTo(1);
+    const first = timer(10).pipe(mapTo(-1));
+    const secnd = timer(20).pipe(mapTo(1));
 
-    first.race(secnd).subscribe(x => {
+    race(first, secnd).subscribe(x => {
       results = x;
     });
 

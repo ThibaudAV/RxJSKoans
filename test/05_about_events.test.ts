@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs/Rx';
 import { EventEmitter } from 'events';
+import { fromEvent } from 'rxjs';
 
 describe('Events', () => {
   const __ = 'Fill in the blank';
@@ -7,7 +7,7 @@ describe('Events', () => {
   test('the main event', () => {
     const received = [];
     const e = new EventEmitter();
-    const subscription = Observable.fromEvent(e, 'change').subscribe(c =>
+    const subscription = fromEvent(e, 'change').subscribe(c =>
       received.push(c),
     );
 

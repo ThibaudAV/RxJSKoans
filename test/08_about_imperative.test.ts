@@ -1,12 +1,13 @@
-import { Observable } from 'rxjs/Rx';
+import { range, of, iif } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
 
 describe('Imperative', () => {
   const __ = 'Fill in the blank';
 
   test('can make a decision with an if with no else', () => {
     const results = [];
-    Observable.range(1, 10)
-      .flatMap(x => Observable.if(() => x % 2 === 0, Observable.of(x)))
+    range(1, 10)
+      .pipe(flatMap(x => iif(() => x % 2 === 0, of(x))))
       .subscribe(x => results.push(x));
 
     expect(__).toEqual(results.join(''));
@@ -14,14 +15,8 @@ describe('Imperative', () => {
 
   test('can make a decision with an if with an else', () => {
     const results = [];
-    Observable.range(1, 5)
-      .flatMap((x, i) =>
-        Observable.if(
-          () => x % 2 === 0,
-          Observable.of(x),
-          Observable.range(x, i),
-        ),
-      )
+    range(1, 5)
+      .pipe(flatMap((x, i) => iif(() => x % 2 === 0, of(x), range(x, i))))
       .subscribe(x => results.push(x));
 
     expect(__).toEqual(results.join(''));

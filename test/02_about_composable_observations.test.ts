@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import Range from '../util/range';
 
 describe('Composable Observations', () => {
@@ -9,7 +9,7 @@ describe('Composable Observations', () => {
     const numbers = [10, 100, __];
 
     Observable.from(numbers)
-      .sum()
+      .reduce((sum, v) => sum + v, 0) // XXX .sum() not yet implemented
       .subscribe(x => {
         received = x;
       });

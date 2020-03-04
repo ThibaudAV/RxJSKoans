@@ -1,4 +1,3 @@
-import { Observable, Subject } from 'rxjs/Rx';
 import Range from '../util/range';
 
 describe('Observable Streams', () => {

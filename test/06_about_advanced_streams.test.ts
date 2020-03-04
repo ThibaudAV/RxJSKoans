@@ -1,13 +1,14 @@
-import { Observable, Subject } from 'rxjs/Rx';
+import { of, merge, Subject, range } from 'rxjs';
+import { groupBy, reduce, map, scan } from 'rxjs/operators';
 
 describe('Advanced Streams', () => {
-  const __ = 'Fill in the blank';
+  const __: any = 'Fill in the blank';
 
   test('merging', () => {
     const easy = [];
-    const you = Observable.of(1, 2, 3);
-    const me = Observable.of('A', 'B', 'C');
-    you.merge(me).subscribe(::easy.push);
+    const you = of(1, 2, 3);
+    const me = of('A', 'B', 'C');
+    merge(you, me).subscribe(e => easy.push(e));
     expect(easy.join(' ')).toEqual(__);
   });
 
@@ -19,7 +20,7 @@ describe('Advanced Streams', () => {
     const s2 = new Subject();
 
     s1.subscribe(f => first.push(f));
-    s1.merge(s2).subscribe(b => both.push(b));
+    merge(s1, s2).subscribe(b => both.push(b));
 
     s1.next('I');
     s1.next('am');
@@ -34,8 +35,8 @@ describe('Advanced Streams', () => {
 
   test('splitting up', () => {
     const oddsAndEvens = [];
-    const numbers = Observable.range(1, 9);
-    const split = numbers.groupBy(n => n % __);
+    const numbers = range(1, 9);
+    const split = numbers.pipe(groupBy(n => n % __));
     split.subscribe(group => {
       group.subscribe(n => {
         oddsAndEvens[group.key] || (oddsAndEvens[group.key] = '');
@@ -49,20 +50,21 @@ describe('Advanced Streams', () => {
 
   test('need to subscribe immediately when splitting', () => {
     const averages = [0, 0];
-    const numbers = Observable.of(22, 22, 99, 22, 101, 22);
-    const split = numbers.groupBy(n => n % 2);
+    const numbers = of(22, 22, 99, 22, 101, 22);
+    const split = numbers.pipe(groupBy(n => n % 2));
 
     split.subscribe(group => {
       group
-        .reduce(({ sum, count }, v) => ({ sum: sum + v, count: count + 1 }), {
-          sum: 0,
-          count: 0,
-        })
-        .map(({ sum, count }) => sum / count)
-        // XXX .average() not yet implemented
-        .__(a => {
-          averages[group.key] = a;
-        });
+        .pipe(
+          scan<number>((acc, curr) => [...acc, curr], []),
+          map(
+            arr => arr.reduce((acc, current) => acc + current, 0) / arr.length,
+          ),
+          map(a => {
+            averages[group.key] = a;
+          }),
+        )
+        .subscribe();
     });
 
     expect(22).toEqual(averages[0]);
@@ -70,15 +72,13 @@ describe('Advanced Streams', () => {
   });
 
   test('multiple subscriptions', () => {
-    const numbers = new Subject();
+    const numbers = new Subject<number>();
     let sum = 0;
     let average = 0;
 
-    numbers
-      .reduce((sum, v) => sum + v, 0) // XXX .sum() not yet implemented
-      .subscribe(n => {
-        sum = n;
-      });
+    numbers.pipe(reduce((sum, v) => sum + v, 0)).subscribe(n => {
+      sum = n;
+    });
     numbers.next(1);
     numbers.next(1);
     numbers.next(1);
@@ -86,12 +86,10 @@ describe('Advanced Streams', () => {
     numbers.next(1);
 
     numbers
-      .reduce(({ sum, count }, v) => ({ sum: sum + v, count: count + 1 }), {
-        sum: 0,
-        count: 0,
-      })
-      .map(({ sum, count }) => sum / count)
-      // XXX .average() not yet implemented
+      .pipe(
+        scan<number>((acc, curr) => [...acc, curr], []),
+        map(arr => arr.reduce((acc, current) => acc + current, 0) / arr.length),
+      )
       .subscribe(n => {
         average = n;
       });
